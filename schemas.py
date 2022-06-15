@@ -4,14 +4,25 @@ class DaretSchema:
         pass
 
     @classmethod
-    def list(self, dbfolder):
+    def no_schema_directory_present(self,dbfolder):
+        schemaFiles = os.listdir(dbfolder)
+        schemaDirState = [sf for sf in schemaFiles if os.path.isfile(os.path.join(dbfolder, sf))]
+        return len(schemaDirState)
+        
+
+    @classmethod
+    def list(self, dbfolder):        
         def unwanted(p):
             return p.startswith(".") or os.path.isfile(os.path.join(dbfolder, p))
         return [schema for schema in os.listdir(dbfolder) if not unwanted(schema)]
 
     @classmethod
     def dump_files(self, dbfolder, schema):
-        path = os.path.join(dbfolder, schema)
+        path = str
+        if schema is None:
+            path = os.path.join(dbfolder)
+        else:
+            path = os.path.join(dbfolder, schema)
 
         if not os.path.exists(path):
             raise FileNotFoundError("Given schema name does not exist")
